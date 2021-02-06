@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World API</title>
+    <style>
+        #unorder-list>li{
+            font-size: 30px;
+        }
+        #countries-ditels{
+            display: none;
+            margin: auto;
+        }
+        #only-flag>img{
+            height: 100px;
+            width: 100px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="country">Countries</h1>
+    <ul id="unorder-list" ></ul>
+
+    <section id="countries-ditels">
+        <div id="only-flag">
+
+        </div>
+        <div ><span id="country-name"></span> </div>
+        <div >Capital : <span id="capital"></span></div>
+        <div>Area : <span id="area"></span>KM</div>
+        <div>Languages<ul id="language"> </ul></div>
+        <div>Population <span id="population"></span></div>
+        
+
+    </section>
+
+    <script>
+        function worldApi() {
+            fetch('https://restcountries.eu/rest/v2/all')
+            .then(res => res.json())
+            .then(data =>{
+                getData(data)
+                
+            })
+        }
+        worldApi()
+
+        function getData(data) {
+            const unorderList = document.getElementById('unorder-list');
+            for (let i = 0; i < data.length; i++) {
+                    const element = data[i];
+                    const info = element.name;
+                    const item = document.createElement('li');
+                    item.addEventListener('click',function () {
+                        countriesDitels(element)
+                        
+                        // const details = element.name;
+                        // console.log(details);
+                    });
+                    item.innerText = info;
+                    unorderList.appendChild(item);
+                    
+                }
+                console.log(data);
+            
+        }
+
+       
+        function countriesDitels(e) {
+            //country name
+            const countryName = e.name;
+            document.getElementById("country-name").innerText = countryName;
+
+            //capital
+            const capital = e.capital;
+            document.getElementById("capital").innerText = capital;
+            document.getElementById('countries-ditels').style.display = 'block';
+            document.getElementById('unorder-list').style.display = 'none';
+
+            //area
+            const area = e.area;
+            document.getElementById("area").innerText = area;
+
+            //language
+            const languageContainer = document.getElementById("language")
+            const language = e.languages;
+
+            for (let i = 0; i < language.length; i++) {
+                const element = language[i];
+                const languageList = document.createElement('li');
+                languageList.innerText = element.name;
+                languageContainer.appendChild(languageList)
+            }
+            
+            
+            //population
+            const population = e.population;
+            document.getElementById("population").innerText = population;
+
+
+            console.log(language);
+
+            //flag
+            const img = e.flag;
+            var image = document.createElement('img');
+            image.setAttribute('src', `${img}`);
+            document.getElementById('only-flag').appendChild(image);
+
+
+            console.log(capital);
+        }
+        
+    </script>
+</body>
+</html>
